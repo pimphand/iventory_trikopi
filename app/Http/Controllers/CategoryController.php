@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class CategoryController extends Controller
 {
@@ -12,17 +15,21 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return view('categories.index', [
-            'categories' => Category::all()
-        ]);
+        return view('master.kategori');
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $category =  QueryBuilder::for(Category::class)
+            ->allowedFilters([
+                AllowedFilter::exact('name'),
+            ])
+            ->paginate(10);
+
+        return CategoryResource::collection($category);
     }
 
     /**
@@ -30,7 +37,17 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required'
+        ]);
+
+        Category::updateOrCreate(['id' => $request->id], [
+            'name' => $request->name
+        ]);
+
+        return [
+            'message' => 'Berhasil menambahkan data'
+        ];
     }
 
     /**
@@ -62,6 +79,10 @@ class CategoryController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Category::destroy($id);
+
+        return [
+            'message' => 'Data berhasil dihapus'
+        ];
     }
 }

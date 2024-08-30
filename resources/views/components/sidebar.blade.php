@@ -11,9 +11,15 @@
 
         <li class="menu-title">Master</li>
         <li class="menu-item">
-            <a href="index.html" class="menu-link">
+            <a href="{{ route('categories.index') }}" class="menu-link">
                 <span class="menu-icon"><i class="mgc_home_3_line"></i></span>
                 <span class="menu-text"> Kategori </span>
+            </a>
+        </li>
+        <li class="menu-item">
+            <a href="{{ route('products.index') }}" class="menu-link">
+                <span class="menu-icon"><i class="mgc_home_3_line"></i></span>
+                <span class="menu-text"> Produk </span>
             </a>
         </li>
     </ul>
